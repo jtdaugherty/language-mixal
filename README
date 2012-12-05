@@ -1,0 +1,6 @@
+MIXAL Parser etc
+================
+
+This package provides a parser, a pretty-printer, and an AST for the
+MIXAL assembly language.  To see this in use, see the `mix-assembler`
+package.
