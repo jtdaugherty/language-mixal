@@ -3,7 +3,7 @@ module Language.MIXAL.Parser
     )
 where
 
-import Control.Applicative ((<$>))
+import Control.Applicative ((<$>), (<*), (*>))
 import Control.Monad (replicateM)
 import Text.ParserCombinators.Parsec
 
@@ -14,15 +14,10 @@ parseMIXAL :: String -> String -> Either ParseError [S.MIXALStmt]
 parseMIXAL filename doc = parse mixalParser filename doc
 
 mixalParser :: Parser [S.MIXALStmt]
-mixalParser = do
-  ss <- many1 p
-  eof
-  return ss
+mixalParser = many1 p <* eof
     where
-      p = do
-        s <- parseStmt
-        (many1 (char '\n') >> return ()) <|> eof
-        return s
+      p = parseStmt <*
+          ((many1 (char '\n') >> return ()) <|> eof)
 
 parseStmt :: Parser S.MIXALStmt
 parseStmt = choice (try <$> choices)
@@ -34,8 +29,7 @@ parseStmt = choice (try <$> choices)
       withoutLabel p = spaces >> p Nothing
 
       withLabel p = do
-        s <- parseDefinedSymbol
-        _ <- many1 space
+        s <- parseDefinedSymbol <* many1 space
         p $ Just s
 
       stmts = [ parseEqu
@@ -47,11 +41,7 @@ parseStmt = choice (try <$> choices)
               ]
 
 parens :: Parser a -> Parser a
-parens p = do
-  _ <- char '('
-  v <- p
-  _ <- char ')'
-  return v
+parens p = char '(' *> p <* char ')'
 
 parseAddress :: Parser S.Address
 parseAddress =
@@ -158,32 +148,20 @@ parseInstOpOnly s = do
   return $ S.Inst s op Nothing Nothing Nothing
 
 parseEqu :: Maybe S.DefinedSymbol -> Parser S.MIXALStmt
-parseEqu s = do
-  _ <- string "EQU"
-  _ <- many1 space
-  w <- parseWValue
-  return $ S.Equ s w
+parseEqu s =
+    S.Equ s <$> (string "EQU" >> many1 space >> parseWValue)
 
 parseEnd :: Maybe S.DefinedSymbol -> Parser S.MIXALStmt
-parseEnd s = do
-  _ <- string "END"
-  _ <- many1 space
-  w <- parseWValue
-  return $ S.End s w
+parseEnd s =
+    S.End s <$> (string "END" >> many1 space >> parseWValue)
 
 parseOrig :: Maybe S.DefinedSymbol -> Parser S.MIXALStmt
-parseOrig s = do
-  _ <- string "ORIG"
-  _ <- many1 space
-  w <- parseWValue
-  return $ S.Orig s w
+parseOrig s =
+    S.Orig s <$> (string "ORIG" >> many1 space >> parseWValue)
 
 parseCon :: Maybe S.DefinedSymbol -> Parser S.MIXALStmt
-parseCon s = do
-  _ <- string "CON"
-  _ <- many1 space
-  w <- parseWValue
-  return $ S.Con s w
+parseCon s =
+    S.Con s <$> (string "CON" >> many1 space >> parseWValue)
 
 mixChar :: Parser S.MIXChar
 mixChar = S.MIXChar <$> oneOf mixChars
@@ -195,9 +173,7 @@ parseAlf s = do
   -- XXX MIXAL doesn't use quotes but we use them to parse the chars
   -- in ALF because we don't enforce the number of spaces between the
   -- OP and the ADDRESS components of a line.
-  _ <- char '"'
-  chs <- replicateM 5 mixChar
-  _ <- char '"'
+  chs <- char '"' *> replicateM 5 mixChar <* char '"'
   let cs = ( chs !! 0
            , chs !! 1
            , chs !! 2
@@ -218,11 +194,7 @@ parseExpr =
                      ]
 
 parseLitConst :: Parser S.WValue
-parseLitConst = do
-  _ <- char '='
-  e <- parseWValue
-  _ <- char '='
-  return e
+parseLitConst = char '=' *> parseWValue <* char '='
 
 parseBinOpExpr :: Parser S.Expr
 parseBinOpExpr = do
@@ -278,8 +250,7 @@ parseDefinedSymbol = choice $ try <$> [ parseLocalDef
                                       ]
     where
       parseLocalDef = do
-        d <- digit
-        _ <- char 'H'
+        d <- digit <* char 'H'
         return $ S.DefLocal $ read $ d:""
 
 parseLocalRef :: Parser S.SymbolRef
@@ -288,13 +259,11 @@ parseLocalRef = choice $ try <$> [ parseLocalRefB
                                  ]
     where
       parseLocalRefB = do
-        d <- digit
-        _ <- char 'B'
+        d <- digit <* char 'B'
         return $ S.RefBackward $ read $ d:""
 
       parseLocalRefF = do
-        d <- digit
-        _ <- char 'F'
+        d <- digit <* char 'F'
         return $ S.RefForward $ read $ d:""
 
 parseSymbol :: Parser S.Symbol
