@@ -134,15 +134,27 @@ parseOpCode =
 -- try to parse them, or, failing that, parse first a defined symbol,
 -- spaces, and then this parser.
 parseInst :: Maybe S.DefinedSymbol -> Parser S.MIXALStmt
-parseInst s = do
+parseInst s =
+    choice $ try <$> [ parseInstOpWithAddress s
+                     , parseInstOpOnly s
+                     ]
+
+parseInstOpWithAddress :: Maybe S.DefinedSymbol -> Parser S.MIXALStmt
+parseInstOpWithAddress s = do
   op <- parseOpCode
-  _ <- many1 space
+  _ <- many1 $ oneOf " \t"
   a <- (Just <$> parseAddress) <|> (return Nothing)
   let parseIndex = S.Index <$> (char ',' >> parseInt)
       parseField = S.FieldExpr <$> parens parseExpr
   i <- (Just <$> parseIndex) <|> (return Nothing)
   f <- (Just <$> parseField) <|> (return Nothing)
   return $ S.Inst s op a i f
+
+parseInstOpOnly :: Maybe S.DefinedSymbol -> Parser S.MIXALStmt
+parseInstOpOnly s = do
+  op <- parseOpCode
+  lookAhead ((char '\n' >> return ()) <|> eof)
+  return $ S.Inst s op Nothing Nothing Nothing
 
 parseEqu :: Maybe S.DefinedSymbol -> Parser S.MIXALStmt
 parseEqu s = do
@@ -249,8 +261,10 @@ parseSignedExpr = do
 
 parseAtomicExpr :: Parser S.AtomicExpr
 parseAtomicExpr =
-    choice $ try <$> [ S.Num <$> parseInt
-                     , S.Sym <$> parseSymbolRef
+    -- Parse symbol references first to catch local symbols
+    -- (e.g. '1F') before trying to parse ints.
+    choice $ try <$> [ S.Sym <$> parseSymbolRef
+                     , S.Num <$> parseInt
                      , char '*' >> return S.Asterisk
                      ]
 
