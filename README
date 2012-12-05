@@ -4,3 +4,11 @@ MIXAL Parser etc
 This package provides a parser, a pretty-printer, and an AST for the
 MIXAL assembly language.  To see this in use, see the `mix-assembler`
 package.
+
+To try it out on a test program:
+
+    $ cabal-dev install
+    $ cabal-dev/bin/mixal-pretty test.mixal
+
+The above will just parse and then pretty-print the parsed MIXAL
+program.
