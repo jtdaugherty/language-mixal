@@ -3,8 +3,8 @@ module Main where
 import System.Environment
 import Text.PrettyPrint.HughesPJ
 
-import System.MIX.MIXALParser
-import System.MIX.PP
+import Language.MIXAL.Parser
+import Language.MIXAL.PP (ppMIXALStmt)
 
 main :: IO ()
 main = do

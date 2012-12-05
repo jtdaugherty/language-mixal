@@ -1,6 +1,6 @@
-module System.MIX.OpCode where
+module Language.MIXAL.OpCode where
 
-import System.MIX.Symbolic
+import Language.MIXAL.AST
 
 -- |Return the numeric version of an opcode.  If the opcode
 -- corresponds to a specific field value, return that too; otherwise

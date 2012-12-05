@@ -1,13 +1,14 @@
-module System.MIX.MIXALParser
+module Language.MIXAL.Parser
     ( parseMIXAL
     )
 where
 
-import qualified System.MIX.Symbolic as S
-import System.MIX.Char (mixChars)
 import Control.Applicative ((<$>))
 import Control.Monad (replicateM)
 import Text.ParserCombinators.Parsec
+
+import qualified Language.MIXAL.AST as S
+import Language.MIXAL.Char (mixChars)
 
 parseMIXAL :: String -> String -> Either ParseError [S.MIXALStmt]
 parseMIXAL filename doc = parse mixalParser filename doc

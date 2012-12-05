@@ -16,11 +16,11 @@ Library
   GHC-Options:       -Wall
 
   Exposed-modules:
-    System.MIX.Symbolic
-    System.MIX.MIXALParser
-    System.MIX.PP
-    System.MIX.Char
-    System.MIX.OpCode
+    Language.MIXAL.AST
+    Language.MIXAL.Parser
+    Language.MIXAL.PP
+    Language.MIXAL.Char
+    Language.MIXAL.OpCode
 
   Build-depends:
     base >= 4,

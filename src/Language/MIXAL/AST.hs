@@ -1,4 +1,4 @@
-module System.MIX.Symbolic where
+module Language.MIXAL.AST where
 
 newtype MIXChar = MIXChar Char
     deriving (Eq, Show)
