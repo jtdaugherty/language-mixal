@@ -56,9 +56,9 @@ parens p = do
 parseAddress :: Parser S.Address
 parseAddress =
     choice $ try <$> [ S.LitConst <$> parseLitConst
-                     , S.AddrRef <$> parseSymbolRef
                      , S.AddrExpr <$> parseExpr
                      , S.AddrLiteral <$> parseWValue
+                     , S.AddrRef <$> parseSymbolRef
                      ]
 
 parseWValue :: Parser S.WValue
