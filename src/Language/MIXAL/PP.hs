@@ -53,7 +53,7 @@ ppExpr (BinOp e1 op1 e2 rest) = hcat $ ppExpr e1 : restDocs
 
 ppAtomicExpr :: AtomicExpr -> Doc
 ppAtomicExpr (Num i) = int i
-ppAtomicExpr (Sym s) = ppSymbolRef s
+ppAtomicExpr (Sym s) = ppSymbol s
 ppAtomicExpr Asterisk = text "*"
 
 ppSymbolDef :: DefinedSymbol -> Doc

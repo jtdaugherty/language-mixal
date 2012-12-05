@@ -56,9 +56,10 @@ parens p = do
 parseAddress :: Parser S.Address
 parseAddress =
     choice $ try <$> [ S.LitConst <$> parseLitConst
+                     , S.AddrRef <$> parseLocalRef
                      , S.AddrExpr <$> parseExpr
                      , S.AddrLiteral <$> parseWValue
-                     , S.AddrRef <$> parseSymbolRef
+                     , S.AddrRef <$> S.RefNormal <$> parseSymbol
                      ]
 
 parseWValue :: Parser S.WValue
@@ -263,7 +264,7 @@ parseAtomicExpr :: Parser S.AtomicExpr
 parseAtomicExpr =
     -- Parse symbol references first to catch local symbols
     -- (e.g. '1F') before trying to parse ints.
-    choice $ try <$> [ S.Sym <$> parseSymbolRef
+    choice $ try <$> [ S.Sym <$> parseSymbol
                      , S.Num <$> parseInt
                      , char '*' >> return S.Asterisk
                      ]
@@ -281,11 +282,10 @@ parseDefinedSymbol = choice $ try <$> [ parseLocalDef
         _ <- char 'H'
         return $ S.DefLocal $ read $ d:""
 
-parseSymbolRef :: Parser S.SymbolRef
-parseSymbolRef = choice $ try <$> [ parseLocalRefB
-                                  , parseLocalRefF
-                                  , S.RefNormal <$> parseSymbol
-                                  ]
+parseLocalRef :: Parser S.SymbolRef
+parseLocalRef = choice $ try <$> [ parseLocalRefB
+                                 , parseLocalRefF
+                                 ]
     where
       parseLocalRefB = do
         d <- digit

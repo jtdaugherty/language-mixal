@@ -37,7 +37,7 @@ data Field = FieldExpr Expr
     deriving (Eq, Show)
 
 data AtomicExpr = Num Int
-                | Sym SymbolRef
+                | Sym Symbol
                 | Asterisk
                   deriving (Eq, Show)
 
