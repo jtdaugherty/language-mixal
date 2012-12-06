@@ -52,7 +52,7 @@ data BinOp = Add
            | Divide
            | Frac
            | Field
-             deriving (Eq, Show)
+             deriving (Eq, Show, Read)
 
 data OpCode
     = LDA | LDX | LD1 | LD2 | LD3 | LD4 | LD5 | LD6
@@ -77,7 +77,7 @@ data OpCode
     | NUM | CHAR
     | SLA | SRA | SLAX | SRAX | SLC | SRC
     | MOVE | NOP | HLT
-      deriving (Eq, Show)
+      deriving (Eq, Show, Read)
 
 newtype Symbol = Symbol String
     deriving (Eq, Show)

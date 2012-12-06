@@ -20,5 +20,6 @@ main = do
   let r = parseMIXAL fname s
   case r of
     Left e -> putStrLn $ "Error: " ++ show e
-    Right is ->
-        mapM_ (putStrLn . render . ppMIXALStmt) is
+    Right is -> do
+           mapM_ print is
+           mapM_ (putStrLn . render . ppMIXALStmt) is
