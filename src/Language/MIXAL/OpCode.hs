@@ -8,7 +8,7 @@ import Language.MIXAL.AST
 -- the user and assembled into (or extracted from) the binary
 -- instruction.  In the Just case a specific F-value is required to
 -- distinguish the opcode based on the instruction involved.
-opCode :: OpCode -> (Int, Maybe Int)
+opCode :: OpCode -> (Integer, Maybe Integer)
 opCode op =
     case op of
       LDA -> (8, Nothing)

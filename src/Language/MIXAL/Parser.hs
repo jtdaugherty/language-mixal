@@ -241,7 +241,7 @@ parseAtomicExpr =
                      , char '*' >> return S.Asterisk
                      ]
 
-parseInt :: Parser Int
+parseInt :: Parser Integer
 parseInt = read <$> many1 digit
 
 parseDefinedSymbol :: Parser S.DefinedSymbol

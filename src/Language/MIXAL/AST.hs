@@ -19,24 +19,24 @@ data Address = AddrExpr Expr
                deriving (Eq, Show)
 
 data DefinedSymbol = DefNormal Symbol
-                   | DefLocal Int
+                   | DefLocal Integer
                      deriving (Eq, Show)
 
 data SymbolRef = RefNormal Symbol
-               | RefBackward Int
-               | RefForward Int
+               | RefBackward Integer
+               | RefForward Integer
                  deriving (Eq, Show)
 
 data WValue = WValue Expr (Maybe Field) [(Expr, Maybe Field)]
               deriving (Eq, Show)
 
-newtype Index = Index Int
+newtype Index = Index Integer
     deriving (Eq, Show)
 
 data Field = FieldExpr Expr
     deriving (Eq, Show)
 
-data AtomicExpr = Num Int
+data AtomicExpr = Num Integer
                 | Sym Symbol
                 | Asterisk
                   deriving (Eq, Show)

@@ -52,7 +52,7 @@ ppExpr (BinOp e1 op1 e2 rest) = hcat $ ppExpr e1 : restDocs
       pairDoc (op, e) = ppBinOp op <> ppExpr e
 
 ppAtomicExpr :: AtomicExpr -> Doc
-ppAtomicExpr (Num i) = int i
+ppAtomicExpr (Num i) = integer i
 ppAtomicExpr (Sym s) = ppSymbol s
 ppAtomicExpr Asterisk = text "*"
 
