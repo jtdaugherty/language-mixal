@@ -1,5 +1,6 @@
 module Main where
 
+import Control.Monad (when)
 import System.Environment
 import Text.PrettyPrint.HughesPJ
 
@@ -10,16 +11,18 @@ main :: IO ()
 main = do
   args <- getArgs
   pName <- getProgName
-  if length args /= 1 then
-      error $ "Usage: " ++ pName ++ " <filename>" else
-      return ()
+
+  when (length args /= 1) $
+       error $ "Usage: " ++ pName ++ " <filename>"
 
   let [fname] = args
 
   s <- readFile fname
-  let r = parseMIXAL fname s
-  case r of
+  case parseMIXAL fname s of
     Left e -> putStrLn $ "Error: " ++ show e
     Right is -> do
-           mapM_ print is
-           mapM_ (putStrLn . render . ppMIXALStmt) is
+         putStrLn "AST:"
+         mapM_ print is
+
+         putStrLn "\nPretty-printed source:"
+         mapM_ (putStrLn . render . ppMIXALStmt) is
