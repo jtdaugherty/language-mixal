@@ -29,12 +29,10 @@ Library
     pretty
 
 Executable mixal-pretty
-  Hs-Source-Dirs:    src
-  Main-is:           Main.hs
+  Hs-Source-Dirs:    programs
+  Main-is:           MixalPretty.hs
   GHC-Options:       -Wall
   Build-Depends:
     base,
-    parsec,
-    mtl,
     pretty,
     language-mixal
