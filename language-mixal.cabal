@@ -1,6 +1,6 @@
 Name:                language-mixal
 Version:             0.1
-Synopsis:            Parser, pretty-printer, and AST types the MIXAL
+Synopsis:            Parser, pretty-printer, and AST types for the MIXAL
                      assembly language
 License:             BSD3
 License-file:        LICENSE
