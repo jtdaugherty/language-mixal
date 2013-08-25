@@ -7,7 +7,7 @@ License-file:        LICENSE
 Author:              Jonathan Daugherty <cygnus@foobox.com>
 Maintainer:          Jonathan Daugherty <cygnus@foobox.com>
 Copyright:           Jonathan Daugherty, 2013
-Category:            System
+Category:            Language
 Build-Type:          Simple
 Cabal-Version:       >=1.8
 
