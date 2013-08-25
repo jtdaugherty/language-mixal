@@ -38,6 +38,6 @@ Executable mixal-pretty
   Main-is:           MixalPretty.hs
   GHC-Options:       -Wall
   Build-Depends:
-    base,
+    base >= 4,
     pretty,
     language-mixal
